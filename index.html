@@ -1,154 +1,168 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>منصة التمويل الذكي – مستقبلك المالي</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #e0f7fa;
-            max-width: 700px;
-            margin: 40px auto;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 12px #aaa;
-        }
-        h1, h2 {
-            text-align: center;
-            color: #007ea7;
-        }
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-        button {
-            margin-top: 20px;
-            background-color: #007ea7;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #005f7a;
-        }
-        .result {
-            background: #fff;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-        table {
-            width: 100%;
-            margin-top: 10px;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 6px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>منصة التمويل الذكي - مستقبلك المالي</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e0f7fa;
+      padding: 20px;
+      color: #004d66;
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #0077a6;
+    }
+    label, select, input {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #00acc1;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #007c91;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <h1>منصة التمويل الذكي</h1>
-    <p style="text-align:center;">شعارنا: <strong>مستقبلك المالي</strong></p>
+  <h1>منصة التمويل الذكي - مستقبلك المالي</h1>
+  <form id="loanForm">
+    <label>الدخل الشهري:</label>
+    <input type="number" id="income" required>
 
-    <form id="loanForm">
-        <label>الراتب الشهري</label>
-        <input type="number" id="salary" required>
+    <label>المبلغ المطلوب (ريال):</label>
+    <input type="number" id="amount" required>
 
-        <label>العمر</label>
-        <input type="number" id="age" required>
+    <label>مدة السداد (بالأشهر):</label>
+    <input type="number" id="term" required>
 
-        <label>المبلغ المطلوب</label>
-        <input type="number" id="amount" required>
+    <label>العمر:</label>
+    <input type="number" id="age" required>
 
-        <label>مدة السداد (بالأشهر)</label>
-        <input type="number" id="duration" required>
+    <label>هل لديك التزامات مالية حالية؟</label>
+    <select id="hasDebt">
+      <option value="no">لا</option>
+      <option value="yes">نعم</option>
+    </select>
 
-        <label>هل يمكنك تحويل الراتب؟</label>
-        <select id="canTransfer">
-            <option value="true">نعم</option>
-            <option value="false">لا</option>
-        </select>
+    <label>هل تحول راتبك؟</label>
+    <select id="salaryTransfer">
+      <option value="yes">نعم</option>
+      <option value="no">لا</option>
+    </select>
 
-        <label>هل يمكنك إحضار كفيل؟</label>
-        <select id="hasGuarantor">
-            <option value="true">نعم</option>
-            <option value="false">لا</option>
-        </select>
+    <label>هل يمكنك توفير كفيل؟</label>
+    <select id="guarantor">
+      <option value="yes">نعم</option>
+      <option value="no">لا</option>
+    </select>
 
-        <button type="submit">اعرض الخيارات</button>
-    </form>
+    <button type="submit">اعرض الخيارات</button>
+  </form>
 
-    <div id="results"></div>
+  <div id="results"></div>
 
-    <script>
-        const companies = [
-            {"name": "شركة النايفات", "min_salary": 5000, "min_age": 20, "max_age": 60, "max_amount": 300000, "max_term": 60, "requires_guarantor": false, "requires_salary_transfer": false, "apr": 0.08},
-            {"name": "شركة اليسر", "min_salary": 4500, "min_age": 22, "max_age": 60, "max_amount": 500000, "max_term": 60, "requires_guarantor": false, "requires_salary_transfer": false, "apr": 0.085},
-            {"name": "شركة الجاسرية", "min_salary": 5000, "min_age": 21, "max_age": 60, "max_amount": 100000, "max_term": 24, "requires_guarantor": true, "requires_salary_transfer": true, "apr": 0.09}
-        ];
+  <script>
+    const companies = [
+      {"name":"شركة النايفات","min_salary":5000,"min_age":20,"max_age":60,"max_amount":300000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":false,"apr":8.0},
+      {"name":"شركة الجاسرية","min_salary":5000,"min_age":21,"max_age":60,"max_amount":100000,"max_term":24,"requires_guarantor":true,"requires_salary_transfer":true,"apr":9.0},
+      {"name":"شركة توكيلات","min_salary":5000,"min_age":21,"max_age":60,"max_amount":500000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":false,"apr":7.9},
+      {"name":"شركة كوارا","min_salary":4000,"min_age":18,"max_age":60,"max_amount":50000,"max_term":24,"requires_guarantor":false,"requires_salary_transfer":false,"apr":6.9},
+      {"name":"شركة إمكان","min_salary":2000,"min_age":20,"max_age":60,"max_amount":1500000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":false,"apr":7.5},
+      {"name":"البنك الأهلي","min_salary":3000,"min_age":18,"max_age":75,"max_amount":2000000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":true,"apr":5.5},
+      {"name":"بنك الرياض","min_salary":3000,"min_age":21,"max_age":60,"max_amount":500000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":true,"apr":6.0},
+      {"name":"بنك الراجحي","min_salary":3000,"min_age":21,"max_age":60,"max_amount":500000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":true,"apr":6.1},
+      {"name":"مصرف الإنماء","min_salary":3000,"min_age":21,"max_age":60,"max_amount":500000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":true,"apr":5.8},
+      {"name":"بنك البلاد","min_salary":3000,"min_age":21,"max_age":60,"max_amount":500000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":true,"apr":5.9},
+      {"name":"بنك الجزيرة","min_salary":3000,"min_age":21,"max_age":60,"max_amount":500000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":true,"apr":6.5},
+      {"name":"البنك العربي الوطني","min_salary":3000,"min_age":18,"max_age":60,"max_amount":500000,"max_term":60,"requires_guarantor":false,"requires_salary_transfer":true,"apr":6.3}
+    ];
 
-        document.getElementById("loanForm").addEventListener("submit", function(e){
-            e.preventDefault();
-            const salary = parseFloat(document.getElementById("salary").value);
-            const age = parseInt(document.getElementById("age").value);
-            const amount = parseFloat(document.getElementById("amount").value);
-            const duration = parseInt(document.getElementById("duration").value);
-            const canTransfer = document.getElementById("canTransfer").value === "true";
-            const hasGuarantor = document.getElementById("hasGuarantor").value === "true";
+    document.getElementById("loanForm").onsubmit = function(e) {
+      e.preventDefault();
 
-            let eligible = companies.filter(c => {
-                return salary >= c.min_salary &&
-                       age >= c.min_age && age <= c.max_age &&
-                       amount <= c.max_amount &&
-                       duration <= c.max_term &&
-                       (canTransfer || !c.requires_salary_transfer) &&
-                       (hasGuarantor || !c.requires_guarantor);
-            });
+      const income = parseFloat(document.getElementById("income").value);
+      const amount = parseFloat(document.getElementById("amount").value);
+      const term = parseInt(document.getElementById("term").value);
+      const age = parseInt(document.getElementById("age").value);
+      const hasDebt = document.getElementById("hasDebt").value === "yes";
+      const salaryTransfer = document.getElementById("salaryTransfer").value === "yes";
+      const guarantor = document.getElementById("guarantor").value === "yes";
 
-            let output = "";
-            if (eligible.length === 0) {
-                output = "<div class='result'><strong>لا توجد شركة تطابق الشروط.</strong></div>";
-            } else {
-                eligible.forEach(c => {
-                    const monthlyRate = c.apr / 12;
-                    const n = duration;
-                    const monthlyPayment = (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -n));
-                    output += `<div class="result">
-                        <h3>${c.name}</h3>
-                        <p><strong>القسط الشهري:</strong> ${monthlyPayment.toFixed(2)} ريال</p>
-                        <p><strong>إجمالي الفائدة:</strong> ${(monthlyPayment * n - amount).toFixed(2)} ريال</p>
-                        <details><summary>عرض جدول السداد</summary>
-                        <table><thead><tr><th>الشهر</th><th>القسط</th><th>فائدة</th><th>أصل الدين</th><th>الرصيد</th></tr></thead><tbody>`;
-                    
-                    let balance = amount;
-                    for (let i = 1; i <= n; i++) {
-                        const interest = balance * monthlyRate;
-                        const principal = monthlyPayment - interest;
-                        balance -= principal;
-                        output += `<tr><td>${i}</td><td>${monthlyPayment.toFixed(2)}</td><td>${interest.toFixed(2)}</td><td>${principal.toFixed(2)}</td><td>${Math.max(balance,0).toFixed(2)}</td></tr>`;
-                    }
-                    output += "</tbody></table></details></div>";
-                });
-            }
+      const eligible = companies.filter(c =>
+        income >= c.min_salary &&
+        age >= c.min_age &&
+        age <= c.max_age &&
+        amount <= c.max_amount &&
+        term <= c.max_term &&
+        (!c.requires_guarantor || guarantor) &&
+        (!c.requires_salary_transfer || salaryTransfer)
+      );
 
-            document.getElementById("results").innerHTML = output;
-        });
-    </script>
+      const container = document.getElementById("results");
+      container.innerHTML = "";
+
+      if (eligible.length === 0) {
+        container.innerHTML = "<p class='result'>لا توجد شركات تنطبق عليها الشروط.</p>";
+        return;
+      }
+
+      eligible.forEach(c => {
+        const monthlyRate = c.apr / 12 / 100;
+        const monthlyPayment = (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -term));
+        const totalPayment = monthlyPayment * term;
+        const totalInterest = totalPayment - amount;
+
+        let html = `
+          <div class="result">
+            <h3>${c.name}</h3>
+            <p>القسط الشهري: ${monthlyPayment.toFixed(2)} ريال</p>
+            <p>إجمالي الفائدة: ${totalInterest.toFixed(2)} ريال</p>
+            <details><summary>عرض جدول السداد</summary>
+              <table>
+                <tr><th>الشهر</th><th>الدفعة</th><th>أصل</th><th>فائدة</th><th>الرصيد</th></tr>
+        `;
+
+        let balance = amount;
+        for (let i = 1; i <= term; i++) {
+          const interest = balance * monthlyRate;
+          const principal = monthlyPayment - interest;
+          balance -= principal;
+          html += `<tr><td>${i}</td><td>${monthlyPayment.toFixed(2)}</td><td>${principal.toFixed(2)}</td><td>${interest.toFixed(2)}</td><td>${balance.toFixed(2)}</td></tr>`;
+        }
+
+        html += "</table></details></div></div>";
+        container.innerHTML += html;
+      });
+    };
+  </script>
 </body>
 </html>
